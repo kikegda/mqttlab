@@ -13,10 +13,9 @@ def on_connect(client, userdata, flags, reason_code, properties):
         # we should always subscribe from on_connect callback to be sure
         # our subscribed is persisted across reconnections.
         print("Connected with result code "+str(reason_code))
-        # client.subscribe("paho/test/topic")
-        client.subscribe("spain/madrid/temp")
-        client.subscribe("spain/madrid/humidity")
-        # client.subscribe("spain/madrid/pressure")
+        #client.subscribe("spain/+/temp")
+        #client.subscribe("spain/#")
+        client.subscribe("+/madrid/+")
 
 mqttc = mqtt.Client(mqtt.CallbackAPIVersion.VERSION2)
 mqttc.on_connect = on_connect
