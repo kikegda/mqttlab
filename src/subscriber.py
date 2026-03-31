@@ -16,6 +16,8 @@ def on_connect(client, userdata, flags, reason_code, properties):
         # Subscribe to all topics from both publishers
         client.subscribe("spain/+/+")
         client.subscribe("france/+/+")
+        # Subscribe to LWT status topics
+        client.subscribe("status/#")
 
 mqttc = mqtt.Client(mqtt.CallbackAPIVersion.VERSION2)
 mqttc.on_connect = on_connect

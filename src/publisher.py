@@ -6,6 +6,12 @@ unacked_publish = set()
 
 mqttc = mqtt.Client(mqtt.CallbackAPIVersion.VERSION2)
 
+LWT_TOPIC = "status/spain/madrid/publisher1"
+LWT_MESSAGE = "Publisher1 disconnected unexpectedly"
+
+# Configure Last Will and Testament before connecting
+mqttc.will_set(LWT_TOPIC, LWT_MESSAGE, qos=0, retain=False)
+
 # Configure keepalive to 30 seconds to observe frequent keepalive messages
 mqttc.connect('localhost', 1883, keepalive=30) #HERE YOU SHOULD SPECIFY THE BROKER IP
 mqttc.loop_start()
@@ -30,8 +36,9 @@ for topic, payload in messages:
     msg.wait_for_publish()
     print(f"Published -> {topic}: {payload}")
 
-# Keep the client connected for 5 minutes to observe keepalive messages
-print("Client connected with keepalive=30s. Staying connected for 5 minutes to observe keepalive behavior...")
+# Keep the client connected to test keepalive and LWT behavior
+print("Client connected with keepalive=30s and LWT configured. Staying connected for 5 minutes...")
+print("To test LWT, terminate this process abruptly (for example: kill -9 <pid>)")
 time.sleep(300)
 
 mqttc.disconnect()
