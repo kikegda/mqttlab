@@ -15,9 +15,6 @@ mqttc.loop_start()
 messages = [
     ("spain/madrid/temp", "20C"),
     ("spain/madrid/humidity", "60%"),
-    ("spain/barcelona/temp", "22C"),
-    ("spain/barcelona/humidity", "55%"),
-    ("france/paris/temp", "18C"),
 ]
 
 
@@ -28,7 +25,7 @@ while len(unacked_publish):
 
 # Due to race-condition described above, the following way to wait for all publish is safer
 for topic, payload in messages:
-    msg = mqttc.publish(topic, payload, 0)
+    msg = mqttc.publish(topic, payload, 0, True)
     msg.wait_for_publish()
     print(f"Published -> {topic}: {payload}")
 
