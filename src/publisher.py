@@ -6,7 +6,7 @@ unacked_publish = set()
 
 mqttc = mqtt.Client(mqtt.CallbackAPIVersion.VERSION2)
 
-mqttc.connect('10.0.2.16') #HERE YOU SHOULD SPECIFY THE BROKER IP
+mqttc.connect('localhost', 1883) #HERE YOU SHOULD SPECIFY THE BROKER IP
 mqttc.loop_start()
 
 # Our application produce some messages

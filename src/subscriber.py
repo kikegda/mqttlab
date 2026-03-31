@@ -21,6 +21,6 @@ mqttc.on_message = on_message
 
 
 mqttc.user_data_set([])
-mqttc.connect('10.0.2.16') #HERE YOU SHOULD SPECIFY THE BROKER IP
+mqttc.connect('localhost', 1883) #HERE YOU SHOULD SPECIFY THE BROKER IP
 mqttc.loop_forever()
 print(f"Received the following message: {mqttc.user_data_get()}")
