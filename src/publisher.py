@@ -10,14 +10,19 @@ mqttc.connect('localhost', 1883) #HERE YOU SHOULD SPECIFY THE BROKER IP
 mqttc.loop_start()
 
 # Our application produce some messages
-msg_info = mqttc.publish("paho/test/topic", "my message")
+msg1 = mqttc.publish("paho/test/topic", "my message")
+msg2 = mqttc.publish("spain/madrid/temp", "20C")
+msg3 = mqttc.publish("spain/madrid/humidity", "60%")
+msg4 = mqttc.publish("spain/madrid/pressure", "1013hPa")
+
 
 # Wait for all message to be published
 while len(unacked_publish):
     time.sleep(0.1)
 
 # Due to race-condition described above, the following way to wait for all publish is safer
-msg_info.wait_for_publish()
+for msg in [msg1, msg2, msg3, msg4]:
+    msg.wait_for_publish()
 
 mqttc.disconnect()
 mqttc.loop_forever()
