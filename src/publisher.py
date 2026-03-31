@@ -1,5 +1,6 @@
 #THIS IS THE PUBLISHER CODE
 import time
+import random
 import paho.mqtt.client as mqtt
 
 unacked_publish = set()
@@ -16,30 +17,17 @@ mqttc.will_set(LWT_TOPIC, LWT_MESSAGE, qos=0, retain=False)
 mqttc.connect('localhost', 1883, keepalive=30) #HERE YOU SHOULD SPECIFY THE BROKER IP
 mqttc.loop_start()
 
-# Our application produce some messages
+# Publish temperature each 30 seconds (10 messages in 5 minutes)
+print("Publisher started. Sending random temperature every 30 seconds...")
+for i in range(10):
+    temp_value = random.randint(10, 30)
+    payload = str(temp_value) + "C"
 
-#better format to escalate more messages
-messages = [
-    ("spain/madrid/temp", "20C"),
-    ("spain/madrid/humidity", "60%"),
-]
-
-
-
-# Wait for all message to be published
-while len(unacked_publish):
-    time.sleep(0.1)
-
-# Due to race-condition described above, the following way to wait for all publish is safer
-for topic, payload in messages:
-    msg = mqttc.publish(topic, payload, 0, True)
+    msg = mqttc.publish("spain/madrid/temp", payload, qos=0, retain=False)
     msg.wait_for_publish()
-    print(f"Published -> {topic}: {payload}")
 
-# Keep the client connected to test keepalive and LWT behavior
-print("Client connected with keepalive=30s and LWT configured. Staying connected for 5 minutes...")
-print("To test LWT, terminate this process abruptly (for example: kill -9 <pid>)")
-time.sleep(300)
+    print(f"[{i+1}/10] Published -> spain/madrid/temp: {payload}")
+    time.sleep(30)
 
 mqttc.disconnect()
 mqttc.loop_stop()

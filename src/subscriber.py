@@ -1,4 +1,5 @@
 #THIS IS THE SUBSCRIBER CODE
+import time
 import paho.mqtt.client as mqtt
 
 def on_message(client, userdata, message):
@@ -26,5 +27,12 @@ mqttc.on_message = on_message
 
 mqttc.user_data_set([])
 mqttc.connect('localhost', 1883) #HERE YOU SHOULD SPECIFY THE BROKER IP
-mqttc.loop_forever()
+
+# Stay connected for 5 minutes and then disconnect gracefully
+mqttc.loop_start()
+print("Subscriber connected. It will disconnect in 5 minutes...")
+time.sleep(300)
+mqttc.disconnect()
+mqttc.loop_stop()
+print("Subscriber disconnected gracefully after 5 minutes")
 print(f"Received the following message: {mqttc.user_data_get()}")
