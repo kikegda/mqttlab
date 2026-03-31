@@ -1,4 +1,4 @@
-#THIS IS THE PUBLISHER CODE
+#THIS IS THE SECOND PUBLISHER CODE - Testing with different keepalive value
 import time
 import paho.mqtt.client as mqtt
 
@@ -6,19 +6,15 @@ unacked_publish = set()
 
 mqttc = mqtt.Client(mqtt.CallbackAPIVersion.VERSION2)
 
-# Configure keepalive to 30 seconds to observe frequent keepalive messages
-mqttc.connect('localhost', 1883, keepalive=30) #HERE YOU SHOULD SPECIFY THE BROKER IP
+# Configure keepalive to 120 seconds to observe less frequent keepalive messages
+mqttc.connect('localhost', 1883, keepalive=120) #HERE YOU SHOULD SPECIFY THE BROKER IP
 mqttc.loop_start()
 
-# Our application produce some messages
-
-#better format to escalate more messages
+# Our application produce some messages with different topics
 messages = [
-    ("spain/madrid/temp", "20C"),
-    ("spain/madrid/humidity", "60%"),
+    ("france/paris/temp", "18C"),
+    ("france/paris/humidity", "65%"),
 ]
-
-
 
 # Wait for all message to be published
 while len(unacked_publish):
@@ -31,7 +27,7 @@ for topic, payload in messages:
     print(f"Published -> {topic}: {payload}")
 
 # Keep the client connected for 5 minutes to observe keepalive messages
-print("Client connected with keepalive=30s. Staying connected for 5 minutes to observe keepalive behavior...")
+print("Client connected with keepalive=120s. Staying connected for 5 minutes to observe keepalive behavior...")
 time.sleep(300)
 
 mqttc.disconnect()
